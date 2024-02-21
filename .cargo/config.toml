@@ -1,0 +1,8 @@
+[build]
+target = "avr-atmega328p.json"
+
+[unstable]
+build-std = ["core"]
+
+[target.'cfg(target_arch = "avr")']
+runner = "avrdude -p m328p -c arduino -P COM5 -b 115200 -U"
