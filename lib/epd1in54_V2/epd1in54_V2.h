@@ -33,10 +33,6 @@
 
 #include "epdif.h"
 
-// Display resolution
-#define EPD_WIDTH       200
-#define EPD_HEIGHT      200
-
 class Epd : EpdIf
 {
 public:

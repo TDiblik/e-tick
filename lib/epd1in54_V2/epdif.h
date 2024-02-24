@@ -24,7 +24,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 #ifndef EPDIF_H
 #define EPDIF_H
 
@@ -35,6 +34,32 @@
 #define DC_PIN          9
 #define CS_PIN          10
 #define BUSY_PIN        7
+
+// Display resolution
+#define EPD_WIDTH       (uint8_t)200
+#define EPD_HEIGHT      (uint8_t)200
+
+// Helpers for working with the display
+#define EPD_BLACK  0
+#define EPD_WHITE  1
+
+#define X_MAX       EPD_WIDTH
+#define Y_MAX       EPD_HEIGHT
+
+#define Y_MID       (EPD_HEIGHT / 2)
+
+#define X_SECTOR_SIZE   (EPD_WIDTH / 2)
+#define Y_SECTOR_SIZE   (EPD_HEIGHT / 4)
+
+#define X_SECTOR_MID    (X_SECTOR_SIZE / 2)
+#define Y_SECTOR_MID    (Y_SECTOR_SIZE / 2)
+
+#define X_0_START   1
+#define X_1_START   (X_0_START + X_SECTOR_SIZE)
+#define Y_0_START   0
+#define Y_1_START   (Y_0_START + Y_SECTOR_SIZE)
+#define Y_2_START   (Y_0_START + Y_SECTOR_SIZE * 2)
+#define Y_3_START   (Y_0_START + Y_SECTOR_SIZE * 3)
 
 class EpdIf {
 public:

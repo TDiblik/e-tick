@@ -1,98 +1,34 @@
+#include <Arduino.h>
 #include <SPI.h>
-#include "epd1in54_V2.h"
-#include "epdpaint.h"
-#include <stdio.h>
+#include "watch.h"
+#include "debug.h"
 
-Epd epd;
-unsigned char image[1024];
-Paint paint(image, 0, 0);
+#define USE_WATCH_VP_HEAP true
 
-#define COLORED     0
-#define UNCOLORED   1
-#define DELAY 5000
+#if USE_WATCH_VP_HEAP
+static unsigned char* __virtual_paint_img = (unsigned char*)malloc(sizeof(unsigned char) * 1024);
+#else
+static unsigned char __virtual_paint_img[1024];
+#endif
+static Watch watch = Watch(__virtual_paint_img);
 
 void setup() {
+  // Setup
   Serial.begin(9600);
+  debug_println("Serial connection setup ... done");
 
-  // put your setup code here, to run once:
-  Serial.println("e-Paper init and clear");
-  epd.LDirInit();
-  epd.Clear();
+  if (__virtual_paint_img == NULL) {
+    while (true) {
+      Serial.println("Unable to allocate memory for virtual paint. Restart the device!");
+      delay(500);
+    }
+  }
+  watch.Setup();
 
-  // paint.SetWidth(200);
-  // paint.SetHeight(24);
-
-  // Serial.println("e-Paper paint");
-  // paint.Clear(COLORED);
-  // paint.DrawStringAt(30, 4, "Hello world!", &Font16, UNCOLORED);
-  // epd.SetFrameMemory(paint.GetImage(), 0, 10, paint.GetWidth(), paint.GetHeight());
-
-  // paint.Clear(UNCOLORED);
-  // paint.DrawStringAt(30, 4, "e-Paper Demo", &Font16, COLORED);
-  // epd.SetFrameMemory(paint.GetImage(), 0, 30, paint.GetWidth(), paint.GetHeight());
-
-  paint.SetWidth(200);
-  paint.SetHeight(30);
-
-  // paint.Clear(UNCOLORED);
-  // paint.DrawRectangle(0, 0, 40, 50, COLORED);
-  // paint.DrawLine(0, 0, 40, 50, COLORED);
-  // paint.DrawLine(40, 0, 0, 50, COLORED);
-  // epd.SetFrameMemory(paint.GetImage(), 16, 60, paint.GetWidth(), paint.GetHeight());
-
-  // paint.Clear(UNCOLORED);
-  // paint.DrawCircle(32, 32, 30, COLORED);
-  // epd.SetFrameMemory(paint.GetImage(), 120, 60, paint.GetWidth(), paint.GetHeight());
-
-  // paint.Clear(UNCOLORED);
-  // paint.DrawFilledRectangle(0, 0, 40, 50, COLORED);
-  // epd.SetFrameMemory(paint.GetImage(), 16, 130, paint.GetWidth(), paint.GetHeight());
-
-  // paint.Clear(UNCOLORED);
-  // paint.DrawFilledCircle(32, 32, 30, COLORED);
-  // epd.SetFrameMemory(paint.GetImage(), 120, 130, paint.GetWidth(), paint.GetHeight());
-  // epd.DisplayFrame();
-  // delay(2000);
-
-  paint.Clear(UNCOLORED);
-  paint.DrawStringAt(10, 10, "2", &Font24, COLORED);
-  epd.SetFrameMemoryPartial(paint.GetImage(), 0, 0, paint.GetWidth(), paint.GetHeight());
-  epd.DisplayPartFrame();
-  delay(DELAY);
-
-  paint.Clear(UNCOLORED);
-  paint.DrawStringAt(10, 10, "2", &Font16, COLORED);
-  epd.SetFrameMemoryPartial(paint.GetImage(), 0, 0, paint.GetWidth(), paint.GetHeight());
-  epd.DisplayPartFrame();
-  delay(DELAY);
-
-  // paint.DrawStringAt(10, 10, "2", &Font24, COLORED);
-
-  // Serial.println("e-Paper show pic");
-  // epd.HDirInit();
-  // epd.Display(IMAGE_DATA);
-
-  //Part display
-  // epd.HDirInit();
-
-  // paint.SetWidth(50);
-  // paint.SetHeight(60);
-  // paint.Clear(UNCOLORED);
-
-  // char i = 0;
-  // char str[10][10] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-  // for (i = 0; i < 10; i++) {
-  //   paint.Clear(UNCOLORED);
-  //   paint.DrawStringAt(10, 10, str[i], &Font24, COLORED);
-  //   epd.SetFrameMemoryPartial(paint.GetImage(), 80, 70, paint.GetWidth(), paint.GetHeight());
-  //   epd.DisplayPartFrame();
-  //   delay(100);
-  // }
-
-  // Serial.println("e-Paper clear and goto sleep");
-  // epd.HDirInit();
-  // epd.Clear();
-  // epd.Sleep();
+  watch.DrawCircle();
 }
 
-void loop() {}
+void loop() {
+  debug_println("lajs");
+  delay(500);
+}
